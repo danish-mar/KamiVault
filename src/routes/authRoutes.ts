@@ -3,12 +3,18 @@ import { authController } from '../controllers/AuthController';
 
 const router = Router();
 
-router.get('/login', (req, res) => authController.renderLogin(req, res));
 router.post('/login', (req, res) => authController.handleLogin(req, res));
-
-router.get('/signup', (req, res) => authController.renderSignup(req, res));
 router.post('/signup', (req, res) => authController.handleSignup(req, res));
+router.get('/logout', (req, res) => {
+    // @ts-ignore
+    req.session.destroy();
+    res.redirect('/login');
+});
+router.get('/me', (req, res) => authController.getCurrentUser(req, res));
 
-router.get('/logout', (req, res) => authController.handleLogout(req, res));
+// 2FA Routes
+router.get('/2fa/setup', (req, res) => authController.setup2FA(req, res));
+router.post('/2fa/verify-setup', (req, res) => authController.verify2FASetup(req, res));
+router.post('/2fa/authenticate', (req, res) => authController.authenticate2FA(req, res));
 
 export default router;
