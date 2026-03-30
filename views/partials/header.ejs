@@ -1,24 +1,28 @@
-<header class="glass sticky top-0 z-50 py-4 border-b border-brand-accent/30 shadow-sm">
-    <nav class="container mx-auto px-4 flex justify-between items-center">
-        <a href="/" class="text-2xl font-bold bg-gradient-to-r from-brand to-brand-dark bg-clip-text text-transparent">
-            KamiVault
+<header class="h-14 translucent-blur sticky top-0 z-50 border-b border-[#d2d2d7]/30">
+    <nav class="container mx-auto px-6 h-full flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 group">
+            <span class="text-lg font-semibold tracking-tight text-[#1d1d1f]">KamiVault</span>
         </a>
-        <ul class="flex items-center space-x-8 font-semibold">
-            <li><a href="/" class="text-gray-600 hover:text-brand transition-colors">Home</a></li>
-            <li><a href="/vault" class="text-gray-600 hover:text-brand transition-colors">Vault</a></li>
-            <li><a href="/settings" class="text-gray-600 hover:text-brand transition-colors">Settings</a></li>
-        </ul>
-        <div class="flex items-center space-x-4">
-            <% if (userId) { %>
-                <span class="text-sm font-bold text-gray-700">Hey, <span class="text-brand"><%= userName %></span></span>
-                <a href="/logout" class="px-5 py-2 border border-brand-accent hover:bg-brand-accent/20 text-brand font-bold rounded-lg transition-all text-sm">
-                    Log Out
-                </a>
+
+        <div class="hidden md:flex items-center gap-8 text-[13px] font-normal text-[#1d1d1f]/80">
+            <a href="/" class="hover:text-[#1d1d1f] transition-colors">Overview</a>
+            <a href="/vault" class="hover:text-[#1d1d1f] transition-colors">Vault</a>
+            <a href="/settings" class="opacity-40 cursor-not-allowed">Admin</a>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <% if (locals.userId) { %>
+                <div class="flex items-center gap-4">
+                    <span class="text-[13px] font-normal text-[#1d1d1f]/60"><%= locals.userName %></span>
+                    <a href="/logout" class="text-[#1d1d1f]/60 hover:text-[#1d1d1f]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+                        </svg>
+                    </a>
+                </div>
             <% } else { %>
-                <a href="/login" class="text-gray-600 hover:text-brand font-bold transition-colors text-sm">Log In</a>
-                <a href="/signup" class="px-5 py-2 bg-brand hover:bg-brand-dark text-white font-bold rounded-lg shadow-lg shadow-brand/10 transition-all text-sm active:scale-95">
-                    Get Started
-                </a>
+                <a href="/login" class="text-[13px] font-normal text-[#1d1d1f]/80 hover:text-[#1d1d1f]">Sign In</a>
+                <a href="/signup" class="bg-[#1d1d1f] text-white px-4 py-1.5 rounded-full text-[13px] font-medium hover:opacity-90">Get Started</a>
             <% } %>
         </div>
     </nav>
