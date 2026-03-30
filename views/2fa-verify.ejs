@@ -1,0 +1,62 @@
+<div class="max-w-sm mx-auto py-24">
+    <div class="apple-card p-10 space-y-12 animate-fadeIn text-center">
+        <div class="space-y-4">
+            <div class="w-16 h-16 bg-[#a855f7]/5 text-[#a855f7] rounded-3xl flex items-center justify-center mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+            <div class="space-y-2">
+                <h1 class="text-2xl font-semibold tracking-tight text-[#1d1d1f]">Identity Verification</h1>
+                <p class="text-[14px] text-[#86868b]">Enter the 6-digit code from your authenticator app to access your vault.</p>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="space-y-2">
+                <label class="text-[12px] font-medium text-[#1d1d1f]">Verification Code</label>
+                <input type="text" id="token" placeholder="000000" maxlength="6" class="w-full text-center text-lg font-semibold tracking-[0.5em] focus:ring-4 focus:ring-[#a855f7]/5">
+            </div>
+            <button onclick="authenticate()" id="authBtn" class="apple-btn w-full">Verify & Access</button>
+        </div>
+
+        <div class="pt-6 border-t border-[#d2d2d7]/30 text-center">
+            <a href="/logout" class="text-[13px] text-rose-500 hover:underline">Cancel & Sign Out</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function authenticate() {
+        const token = document.getElementById('token').value;
+        if (token.length !== 6) return;
+        
+        const btn = document.getElementById('authBtn');
+        btn.disabled = true;
+        btn.textContent = 'Verifying Identity...';
+
+        try {
+            const res = await fetch('/api/auth/2fa/authenticate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token })
+            });
+            const result = await res.json();
+            if (res.ok) {
+                // If login flow returned a new token, store it
+                if (result.token) localStorage.setItem('token', result.token);
+                window.location.href = '/vault';
+            } else {
+                alert(result.error);
+                btn.disabled = false;
+                btn.textContent = 'Verify & Access';
+            }
+        } catch (err) { console.error(err); }
+    }
+
+    // Auto-focus and handle enter
+    document.getElementById('token').focus();
+    document.getElementById('token').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') authenticate();
+    });
+</script>

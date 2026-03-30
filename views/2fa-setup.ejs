@@ -1,0 +1,68 @@
+<div class="max-w-sm mx-auto py-24">
+    <div class="apple-card p-10 space-y-12 animate-fadeIn text-center">
+        <div class="space-y-4">
+            <div class="w-16 h-16 bg-[#a855f7]/5 text-[#a855f7] rounded-3xl flex items-center justify-center mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+            <div class="space-y-2">
+                <h1 class="text-2xl font-semibold tracking-tight text-[#1d1d1f]">Secure your Vault</h1>
+                <p class="text-[14px] text-[#86868b]">Scan this code with your authenticator app to enable Two-Factor Authentication.</p>
+            </div>
+        </div>
+
+        <div class="bg-[#f5f5f7] p-6 rounded-3xl inline-block mx-auto">
+            <img id="qrCode" class="w-48 h-48 rounded-xl bg-white shadow-sm p-4 hidden">
+            <div id="qrLoading" class="w-48 h-48 flex items-center justify-center">
+                <div class="w-6 h-6 border-2 border-[#1d1d1f]/10 border-t-[#a855f7] rounded-full animate-spin"></div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="space-y-2">
+                <label class="text-[12px] font-medium text-[#1d1d1f]">Enter 6-digit code</label>
+                <input type="text" id="token" placeholder="000000" maxlength="6" class="w-full text-center text-lg font-semibold tracking-[0.5em]">
+            </div>
+            <button onclick="verifySetup()" id="verifyBtn" class="apple-btn w-full">Enable & Continue</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadQR() {
+        try {
+            const res = await fetch('/api/auth/2fa/setup');
+            const data = await res.json();
+            document.getElementById('qrCode').src = data.qrCodeUrl;
+            document.getElementById('qrCode').classList.remove('hidden');
+            document.getElementById('qrLoading').classList.add('hidden');
+        } catch (err) { console.error(err); }
+    }
+
+    async function verifySetup() {
+        const token = document.getElementById('token').value;
+        if (token.length !== 6) return;
+        
+        const btn = document.getElementById('verifyBtn');
+        btn.disabled = true;
+        btn.textContent = 'Verifying...';
+
+        try {
+            const res = await fetch('/api/auth/2fa/verify-setup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token })
+            });
+            const result = await res.json();
+            if (res.ok) window.location.href = '/vault';
+            else {
+                alert(result.error);
+                btn.disabled = false;
+                btn.textContent = 'Enable & Continue';
+            }
+        } catch (err) { console.error(err); }
+    }
+
+    loadQR();
+</script>
