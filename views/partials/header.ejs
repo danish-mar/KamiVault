@@ -3,10 +3,23 @@
         <a href="/" class="text-2xl font-bold bg-gradient-to-r from-brand to-brand-dark bg-clip-text text-transparent">
             KamiVault
         </a>
-        <ul class="flex space-x-8 font-semibold">
+        <ul class="flex items-center space-x-8 font-semibold">
             <li><a href="/" class="text-gray-600 hover:text-brand transition-colors">Home</a></li>
             <li><a href="/vault" class="text-gray-600 hover:text-brand transition-colors">Vault</a></li>
             <li><a href="/settings" class="text-gray-600 hover:text-brand transition-colors">Settings</a></li>
         </ul>
+        <div class="flex items-center space-x-4">
+            <% if (userId) { %>
+                <span class="text-sm font-bold text-gray-700">Hey, <span class="text-brand"><%= userName %></span></span>
+                <a href="/logout" class="px-5 py-2 border border-brand-accent hover:bg-brand-accent/20 text-brand font-bold rounded-lg transition-all text-sm">
+                    Log Out
+                </a>
+            <% } else { %>
+                <a href="/login" class="text-gray-600 hover:text-brand font-bold transition-colors text-sm">Log In</a>
+                <a href="/signup" class="px-5 py-2 bg-brand hover:bg-brand-dark text-white font-bold rounded-lg shadow-lg shadow-brand/10 transition-all text-sm active:scale-95">
+                    Get Started
+                </a>
+            <% } %>
+        </div>
     </nav>
 </header>
