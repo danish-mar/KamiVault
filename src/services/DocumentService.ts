@@ -57,7 +57,7 @@ export class DocumentService {
                     category: ai.category || 'Other',
                     tags: ai.tags || [],
                     description: ai.description || '',
-                    structuredData: ai.metadata || ai,
+                    structuredData: ai,
                     thumbnailUrl: result.thumbnail ? `data:image/jpeg;base64,${result.thumbnail}` : undefined
                 });
                 

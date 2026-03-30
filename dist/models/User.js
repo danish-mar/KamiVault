@@ -42,19 +42,20 @@ const UserSchema = new mongoose_1.Schema({
     email: { type: String, required: true, unique: true, trim: true, lowercase: true },
     password: { type: String, required: true },
     name: { type: String, required: true, trim: true },
+    twoFactorSecret: { type: String },
+    is2FAEnabled: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now }
 });
 // Hash password before saving
-UserSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function () {
     if (!this.isModified('password'))
-        return next();
+        return;
     try {
         const salt = await bcryptjs_1.default.genSalt(10);
         this.password = await bcryptjs_1.default.hash(this.password, salt);
-        next();
     }
     catch (error) {
-        next(error);
+        throw error;
     }
 });
 UserSchema.methods.comparePassword = async function (password) {

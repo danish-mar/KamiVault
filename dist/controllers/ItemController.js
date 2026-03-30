@@ -9,22 +9,30 @@ class ItemController {
             res.render('index', { items });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).render('index', { items: [], error: error.message });
         }
     }
-    async renderVault(req, res) {
+    renderSettings(req, res) {
+        res.render('settings');
+    }
+    async getAllItems(req, res) {
         try {
             const items = await ItemService_1.itemService.getAllItems();
-            res.render('vault', { items });
+            res.json(items);
         }
         catch (error) {
-            console.error(error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).json({ error: error.message });
         }
     }
-    async renderSettings(req, res) {
-        res.render('settings');
+    async getRecentItems(req, res) {
+        try {
+            const count = parseInt(req.query.count) || 3;
+            const items = await ItemService_1.itemService.getRecentItems(count);
+            res.json(items);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
     }
 }
 exports.ItemController = ItemController;
