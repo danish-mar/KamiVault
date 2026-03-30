@@ -1,0 +1,61 @@
+<section class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold text-gray-900 mb-8">Vault <span class="text-brand">Settings</span></h1>
+    
+    <div class="space-y-6">
+        <!-- Security Section -->
+        <div class="bg-white p-8 rounded-3xl border border-brand-accent/30 shadow-sm">
+            <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+                Security & Privacy
+            </h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center p-4 bg-brand-light/50 rounded-2xl">
+                    <div>
+                        <p class="font-bold text-gray-800">Two-Factor Authentication</p>
+                        <p class="text-sm text-gray-500">Add an extra layer of security to your vault.</p>
+                    </div>
+                    <div class="w-12 h-6 bg-brand rounded-full relative cursor-pointer">
+                        <div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center p-4 rounded-2xl border border-gray-100">
+                    <div>
+                        <p class="font-bold text-gray-800">Auto-Lock Vault</p>
+                        <p class="text-sm text-gray-500">Automatically lock your vault after 5 minutes of inactivity.</p>
+                    </div>
+                    <select class="bg-transparent font-semibold text-brand outline-none cursor-pointer">
+                        <option>Immediately</option>
+                        <option selected>5 Minutes</option>
+                        <option>30 Minutes</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appearance Section -->
+        <div class="bg-white p-8 rounded-3xl border border-brand-accent/30 shadow-sm">
+            <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.172-1.172a4 4 0 115.656 5.656L10 21.657"></path>
+                </svg>
+                Appearance
+            </h2>
+            <div class="grid grid-cols-3 gap-4">
+                <button class="p-4 border-2 border-brand bg-brand-light rounded-2xl text-center">
+                    <div class="w-full h-12 bg-white rounded-lg mb-2 border border-brand/20"></div>
+                    <span class="text-xs font-bold text-brand">Light Accent</span>
+                </button>
+                <button class="p-4 border border-gray-100 hover:border-brand-accent rounded-2xl text-center group transition-colors">
+                    <div class="w-full h-12 bg-gray-900 rounded-lg mb-2"></div>
+                    <span class="text-xs font-bold text-gray-500 group-hover:text-brand">Deep Purple</span>
+                </button>
+                <button class="p-4 border border-gray-100 hover:border-brand-accent rounded-2xl text-center group transition-colors">
+                    <div class="w-full h-12 bg-brand rounded-lg mb-2"></div>
+                    <span class="text-xs font-bold text-gray-500 group-hover:text-brand">Classic</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>

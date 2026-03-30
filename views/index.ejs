@@ -1,0 +1,44 @@
+<section class="mb-12 text-center py-16 px-6 bg-gradient-to-br from-brand/5 to-white rounded-[3rem] border border-brand-accent/20">
+    <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight">
+        Your Assets, <span class="bg-gradient-to-r from-brand to-brand-dark bg-clip-text text-transparent">Reimagined</span>
+    </h1>
+    <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+        Experience the next generation of digital vaulting. Secure your most precious data with a touch of elegance and absolute privacy.
+    </p>
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="/vault" class="px-8 py-4 bg-brand hover:bg-brand-dark text-white rounded-xl font-bold shadow-lg shadow-brand/20 transition-all hover:scale-105">
+            Access Vault
+        </a>
+        <button class="px-8 py-4 bg-white border border-gray-200 hover:border-brand-accent text-gray-700 rounded-xl font-bold transition-all hover:bg-brand-accent/10">
+            View Pricing
+        </button>
+    </div>
+</section>
+
+<section class="container mx-auto max-w-6xl">
+    <div class="flex justify-between items-end mb-8">
+        <h2 class="text-3xl font-bold text-gray-900">Recent <span class="text-brand">Vault</span> Items</h2>
+        <a href="/vault" class="text-brand font-bold hover:underline">View All &rarr;</a>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% if (items.length > 0) { %>
+            <% items.forEach(item => { %>
+                <%- include('partials/card', { name: item.name, description: item.description, createdAt: item.createdAt }) %>
+            <% }) %>
+        <% } else { %>
+            <div class="col-span-full py-20 bg-white rounded-3xl border-2 border-dashed border-brand-accent flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-brand-accent rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">No items found</h3>
+                <p class="text-gray-500 mb-6 max-w-xs">Start by adding your first digital asset to the vault today.</p>
+                <button class="px-6 py-2 bg-brand text-white rounded-lg font-bold hover:bg-brand-dark transition-colors">
+                    Add My First Item
+                </button>
+            </div>
+        <% } %>
+    </div>
+</section>

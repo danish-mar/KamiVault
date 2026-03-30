@@ -1,0 +1,27 @@
+<section class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">My <span class="text-brand">Vault</span></h1>
+            <p class="text-gray-500">Securely browse and manage your digital assets.</p>
+        </div>
+        <button class="px-6 py-3 bg-brand hover:bg-brand-dark text-white rounded-xl font-bold shadow-lg shadow-brand/20 transition-all flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Add New Asset
+        </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% if (items.length > 0) { %>
+            <% items.forEach(item => { %>
+                <%- include('partials/card', { name: item.name, description: item.description, createdAt: item.createdAt }) %>
+            <% }) %>
+        <% } else { %>
+            <div class="col-span-full py-20 bg-white rounded-3xl border-2 border-dashed border-brand-accent flex flex-col items-center text-center">
+                <h3 class="text-xl font-bold text-gray-800">Your vault is empty</h3>
+                <p class="text-gray-500 mb-6">Start securing your digital life today.</p>
+            </div>
+        <% } %>
+    </div>
+</section>
