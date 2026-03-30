@@ -1,27 +1,360 @@
-<section class="max-w-6xl mx-auto">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
-        <div>
-            <h1 class="text-4xl font-bold text-gray-900 mb-2">My <span class="text-brand">Vault</span></h1>
-            <p class="text-gray-500">Securely browse and manage your digital assets.</p>
+<div class="space-y-12 pb-32">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div class="space-y-1">
+            <h1 class="text-4xl font-semibold tracking-tight text-[#1d1d1f]">Vault</h1>
+            <p class="text-[15px] font-normal text-[#86868b]">Securely manage and analyze your document assets.</p>
         </div>
-        <button class="px-6 py-3 bg-brand hover:bg-brand-dark text-white rounded-xl font-bold shadow-lg shadow-brand/20 transition-all flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        
+        <button onclick="document.getElementById('fileInput').click()" class="apple-btn flex items-center gap-2 group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
             </svg>
-            Add New Asset
+            <span>Upload</span>
         </button>
+        <input type="file" id="fileInput" class="hidden" accept=".pdf,image/*" onchange="handleUpload(this)">
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% if (items.length > 0) { %>
-            <% items.forEach(item => { %>
-                <%- include('partials/card', { name: item.name, description: item.description, createdAt: item.createdAt }) %>
-            <% }) %>
-        <% } else { %>
-            <div class="col-span-full py-20 bg-white rounded-3xl border-2 border-dashed border-brand-accent flex flex-col items-center text-center">
-                <h3 class="text-xl font-bold text-gray-800">Your vault is empty</h3>
-                <p class="text-gray-500 mb-6">Start securing your digital life today.</p>
+    <!-- Stats Summary (Minimalist) -->
+    <div class="flex items-center gap-12 text-[13px] font-normal text-[#86868b] border-b border-[#d2d2d7]/30 pb-8">
+        <div class="flex items-center gap-2">
+            <span class="text-[#1d1d1f] font-semibold"><%= documents.length %></span>
+            <span>Documents</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-[#a855f7] font-semibold"><%= documents.filter(d => d.status === 'processed').length %></span>
+            <span>Analyzed Assets</span>
+        </div>
+    </div>
+
+    <!-- Document Grid (Apple Minimalist) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="documentGrid">
+        <% if (documents.length === 0) { %>
+            <div class="col-span-full py-40 flex flex-col items-center justify-center space-y-6">
+                <div class="w-20 h-20 bg-[#f5f5f7] rounded-full flex items-center justify-center text-[#d2d2d7]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <div class="text-center space-y-1">
+                    <h3 class="text-lg font-medium text-[#1d1d1f]">No Documents</h3>
+                    <p class="text-sm text-[#86868b]">Upload a file to start neural analysis.</p>
+                </div>
             </div>
+        <% } else { %>
+            <% documents.forEach(doc => { %>
+                <div class="apple-card p-4 group" id="doc-<%= doc._id %>">
+                    <div class="relative h-44 rounded-2xl overflow-hidden bg-[#f5f5f7] mb-5">
+                        <% if (doc.thumbnailUrl) { %>
+                            <img src="<%= doc.thumbnailUrl %>" class="w-full h-full object-cover">
+                        <% } else { %>
+                            <div class="w-full h-full flex items-center justify-center text-[#d2d2d7]">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <div class="px-2 space-y-5">
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <div class="status-dot <%= doc.status === 'processed' ? 'bg-emerald-500' : (doc.status === 'processing' ? 'bg-amber-400 animate-pulse' : 'bg-[#d2d2d7]') %>"></div>
+                                <span class="text-[11px] font-medium text-[#86868b] uppercase tracking-wide"><%= doc.category || 'Record' %></span>
+                            </div>
+                            <h3 class="text-sm font-semibold text-[#1d1d1f] truncate" title="<%= doc.title || doc.originalName %>">
+                                <%= doc.title || doc.originalName %>
+                            </h3>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="text-[11px] font-normal text-[#86868b]"><%= doc.status.charAt(0).toUpperCase() + doc.status.slice(1) %></span>
+                            <div class="flex gap-4">
+                                <button onclick="previewDoc('<%= doc._id %>')" class="text-[#1d1d1f] hover:opacity-60">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </button>
+                                <button onclick="confirmDelete('<%= doc._id %>')" class="text-[#86868b] hover:text-rose-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
         <% } %>
     </div>
-</section>
+</div>
+
+<!-- Simple Entry Modal -->
+<div id="metadataModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-6 bg-black/5 backdrop-blur-sm">
+    <div class="w-full max-w-sm bg-white rounded-3xl p-8 shadow-2xl space-y-8 animate-fadeIn">
+        <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-[#1d1d1f]">Dossier Entry</h2>
+            <button onclick="closeMetadataModal()" class="text-[#86868b] hover:text-[#1d1d1f]">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="space-y-5">
+            <div class="space-y-2">
+                <label class="text-[12px] font-medium text-[#86868b]">Title</label>
+                <input type="text" id="metaTitle" class="w-full" placeholder="Scanning assets...">
+            </div>
+            <div class="space-y-2">
+                <label class="text-[12px] font-medium text-[#86868b]">Description</label>
+                <textarea id="metaDescription" rows="3" class="w-full resize-none" placeholder="Neural analysis pending..."></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-2">
+                    <label class="text-[12px] font-medium text-[#86868b]">Category</label>
+                    <select id="metaCategory" class="w-full">
+                        <option value="Personal">Personal</option>
+                        <option value="Work">Work</option>
+                        <option value="Legal">Legal</option>
+                        <option value="Medical">Medical</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[12px] font-medium text-[#86868b]">Tags</label>
+                    <input type="text" id="metaTags" class="w-full" placeholder="Tags...">
+                </div>
+            </div>
+        </div>
+
+        <button onclick="saveMetadata()" id="saveMetadataBtn" class="apple-btn w-full">Finalize Entry</button>
+    </div>
+</div>
+
+<!-- Minimalist Asset Preview -->
+<div id="previewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/10 backdrop-blur-md">
+    <div class="relative w-full h-full max-w-6xl bg-white rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-2xl border border-[#d2d2d7]/30 animate-fadeIn">
+        
+        <!-- Left: Visualization -->
+        <div class="w-full md:w-[60%] h-[40%] md:h-full bg-[#fbfbfd] p-4 md:p-8 flex items-center justify-center border-b md:border-b-0 md:border-r border-[#d2d2d7]/50">
+            <div id="previewVisual" class="w-full h-full bg-white rounded-2xl flex items-center justify-center overflow-hidden relative shadow-sm p-4">
+                <!-- Content injected here -->
+            </div>
+        </div>
+
+        <!-- Right: Intel Pane -->
+        <div class="w-full md:w-[40%] h-[60%] md:h-full flex flex-col p-8 md:p-12 space-y-10">
+            <div class="flex items-center justify-between">
+                <span id="previewCategory" class="text-[12px] font-medium text-[#a855f7] tracking-wide uppercase">Asset</span>
+                <button onclick="closePreview()" class="text-[#86868b] hover:text-[#1d1d1f]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex-grow overflow-y-auto space-y-10 custom-scroll pr-4">
+                <div class="space-y-3">
+                    <h2 id="previewTitle" class="text-3xl font-semibold text-[#1d1d1f] tracking-tight">Record</h2>
+                    <p id="previewDesc" class="text-sm text-[#86868b] leading-relaxed">Neural summary pending...</p>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-[12px] font-semibold text-[#1d1d1f] uppercase tracking-wider pb-2 border-b border-[#d2d2d7]/30">Extracted Data</h4>
+                    <div id="previewData" class="grid grid-cols-1 gap-3"></div>
+                </div>
+
+                <div id="previewTags" class="flex flex-wrap gap-2"></div>
+            </div>
+
+            <button id="previewDownload" class="bg-[#f5f5f7] text-[#1d1d1f] w-full py-3.5 rounded-full text-sm font-medium hover:bg-[#e8e8ed] transition-colors">
+                Download Asset
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    let currentlyEditingId = null;
+
+    async function handleUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('document', file);
+        try {
+            const res = await fetch('/api/documents/upload', { method: 'POST', body: formData });
+            const result = await res.json();
+            if (res.ok) {
+                currentlyEditingId = result.document._id;
+                document.getElementById('metaTitle').value = file.name.split('.')[0];
+                document.getElementById('metadataModal').classList.remove('hidden');
+                socket.emit('join', currentlyEditingId);
+            }
+        } catch (err) { console.error(err); }
+    }
+
+    async function saveMetadata() {
+        if (!currentlyEditingId) return;
+        const btn = document.getElementById('saveMetadataBtn');
+        btn.disabled = true;
+        btn.textContent = 'Processing...';
+        const payload = {
+            title: document.getElementById('metaTitle').value,
+            description: document.getElementById('metaDescription').value,
+            category: document.getElementById('metaCategory').value,
+            tags: document.getElementById('metaTags').value.split(',').map(t => t.trim()).filter(t => t)
+        };
+        try {
+            const res = await fetch(`/api/documents/${currentlyEditingId}/metadata`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) location.reload();
+            else btn.disabled = false;
+        } catch (err) { console.error(err); }
+    }
+
+    async function previewDoc(id) {
+        const modal = document.getElementById('previewModal');
+        const visual = document.getElementById('previewVisual');
+        const title = document.getElementById('previewTitle');
+        const desc = document.getElementById('previewDesc');
+        const category = document.getElementById('previewCategory');
+        const dataGrid = document.getElementById('previewData');
+        const tags = document.getElementById('previewTags');
+        const downloadBtn = document.getElementById('previewDownload');
+
+        modal.classList.remove('hidden');
+        visual.innerHTML = `<div class="h-8 w-8 border-2 border-[#f5f5f7] border-t-[#a855f7] rounded-full animate-spin"></div>`;
+        dataGrid.innerHTML = '';
+        tags.innerHTML = '';
+
+        try {
+            const [resDoc, resUrl] = await Promise.all([
+                fetch(`/api/documents/${id}`),
+                fetch(`/api/documents/${id}/download`)
+            ]);
+            const doc = await resDoc.json();
+            const urlData = await resUrl.json();
+
+            title.textContent = doc.title || doc.originalName;
+            desc.textContent = doc.description || 'Analysis complete. No summary projected.';
+            category.textContent = doc.category || 'Archive';
+            
+            if (urlData.url) {
+                if (urlData.url.toLowerCase().includes('.pdf') || urlData.url.includes('response-content-type=application%2Fpdf')) {
+                    visual.innerHTML = `<iframe src="${urlData.url}#toolbar=0" class="w-full h-full border-none rounded-xl"></iframe>`;
+                } else {
+                    visual.innerHTML = `<img src="${urlData.url}" class="max-w-full max-h-full object-contain">`;
+                }
+                downloadBtn.onclick = () => window.open(urlData.url, '_blank');
+            }
+
+            if (doc.structuredData) {
+                const data = doc.structuredData;
+                const meta = data.metadata || {};
+                const docType = data.doc_type || 'generic';
+
+                if (['aadhaar', 'pan', 'voter_id', 'dl'].includes(docType)) {
+                    // Render Specific Template
+                    const cardColors = {
+                        aadhaar: 'from-blue-50 to-white border-blue-100',
+                        pan: 'from-emerald-50 to-white border-emerald-100',
+                        voter_id: 'from-amber-50 to-white border-amber-100',
+                        dl: 'from-gray-50 to-white border-gray-100'
+                    };
+
+                    const templateHtml = `
+                        <div class="w-full max-w-sm mx-auto bg-gradient-to-br ${cardColors[docType]} p-8 rounded-3xl border-2 shadow-sm space-y-6 animate-fadeIn">
+                            <div class="flex justify-between items-start">
+                                <div class="space-y-1">
+                                    <p class="text-[10px] font-bold text-[#1d1d1f]/40 uppercase tracking-[0.2em]">${docType.replace('_', ' ')} Registry</p>
+                                    <h4 class="text-lg font-bold text-[#1d1d1f] tracking-tight">NATIONAL IDENTIFIER</h4>
+                                </div>
+                                <div class="w-10 h-10 bg-white rounded-xl shadow-inner flex items-center justify-center border border-black/5">
+                                    <span class="text-[10px] font-black text-black">IND</span>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-y-4 pt-4">
+                                <div class="col-span-full">
+                                    <p class="text-[9px] font-semibold text-[#86868b] uppercase tracking-widest">Full Name</p>
+                                    <p class="text-sm font-semibold text-[#1d1d1f]">${meta.name || 'DATA_PENDING'}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-semibold text-[#86868b] uppercase tracking-widest">DOB</p>
+                                    <p class="text-sm font-semibold text-[#1d1d1f]">${meta.dob || 'DATA_PENDING'}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-semibold text-[#86868b] uppercase tracking-widest">Gender</p>
+                                    <p class="text-sm font-semibold text-[#1d1d1f] text-capitalize">${meta.gender || 'DATA_PENDING'}</p>
+                                </div>
+                                <div class="col-span-full pt-4 border-t border-black/5">
+                                    <p class="text-[9px] font-semibold text-[#86868b] uppercase tracking-widest">Identifier Key</p>
+                                    <p class="text-lg font-black text-[#1d1d1f] tracking-widest uppercase">
+                                        ${meta.id_number || meta.aadhaar_no || meta.pan_no || meta.epic_no || meta.dl_no || 'REDACTED'}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-2 flex justify-end">
+                                <div class="px-2 py-1 bg-black text-white text-[8px] font-bold rounded uppercase tracking-tighter">SECURE NODE</div>
+                            </div>
+                        </div>
+                    `;
+                    dataGrid.innerHTML = templateHtml;
+                } else {
+                    // Fallback to Matrix
+                    Object.entries(data).filter(([k,v]) => typeof v !== 'object' && !['title', 'description', 'doc_type'].includes(k)).forEach(([key, value]) => {
+                        const row = document.createElement('div');
+                        row.className = 'flex justify-between items-center py-2 border-b border-[#d2d2d7]/20';
+                        row.innerHTML = `<span class="text-[12px] text-[#86868b] font-normal">${key.replace(/_/g, ' ')}</span><span class="text-[13px] text-[#1d1d1f] font-medium">${value}</span>`;
+                        dataGrid.appendChild(row);
+                    });
+                }
+            }
+
+            if (doc.tags) {
+                doc.tags.forEach(tag => {
+                    const tagEl = document.createElement('span');
+                    tagEl.className = 'px-3 py-1 bg-[#f5f5f7] text-[#86868b] text-[11px] rounded-full';
+                    tagEl.textContent = `#${tag}`;
+                    tags.appendChild(tagEl);
+                });
+            }
+        } catch (err) { visual.innerHTML = `<p class="text-sm text-rose-500">Registry error.</p>`; }
+    }
+
+    function closePreview() { document.getElementById('previewModal').classList.add('hidden'); }
+    function closeMetadataModal() { document.getElementById('metadataModal').classList.add('hidden'); location.reload(); }
+
+    async function confirmDelete(id) {
+        if (!confirm('Dossier will be permanently removed. Continue?')) return;
+        try {
+            const res = await fetch(`/api/documents/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                const el = document.getElementById(`doc-${id}`);
+                el.style.opacity = '0';
+                el.style.transform = 'scale(0.95)';
+                setTimeout(() => { el.remove(); if (!document.querySelector('[id^="doc-"]')) location.reload(); }, 300);
+            }
+        } catch (err) { console.error(err); }
+    }
+
+    socket.on('documentUpdate', (data) => {
+        const doc = data.document;
+        if (currentlyEditingId === doc._id && doc.status === 'processed') {
+            document.getElementById('metaTitle').value = doc.title || document.getElementById('metaTitle').value;
+            document.getElementById('metaDescription').value = doc.description || '';
+            document.getElementById('metaCategory').value = doc.category || 'Other';
+            document.getElementById('metaTags').value = (doc.tags || []).join(', ');
+        }
+    });
+</script>

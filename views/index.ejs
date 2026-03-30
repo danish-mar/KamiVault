@@ -1,44 +1,51 @@
-<section class="mb-12 text-center py-16 px-6 bg-gradient-to-br from-brand/5 to-white rounded-[3rem] border border-brand-accent/20">
-    <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight">
-        Your Assets, <span class="bg-gradient-to-r from-brand to-brand-dark bg-clip-text text-transparent">Reimagined</span>
-    </h1>
-    <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-        Experience the next generation of digital vaulting. Secure your most precious data with a touch of elegance and absolute privacy.
-    </p>
-    <div class="flex flex-col sm:flex-row justify-center gap-4">
-        <a href="/vault" class="px-8 py-4 bg-brand hover:bg-brand-dark text-white rounded-xl font-bold shadow-lg shadow-brand/20 transition-all hover:scale-105">
-            Access Vault
-        </a>
-        <button class="px-8 py-4 bg-white border border-gray-200 hover:border-brand-accent text-gray-700 rounded-xl font-bold transition-all hover:bg-brand-accent/10">
-            View Pricing
-        </button>
-    </div>
-</section>
+<div class="max-w-4xl mx-auto space-y-32 py-16 animate-fadeIn">
+    <!-- Hero (Apple Aesthetic) -->
+    <section class="text-center space-y-8">
+        <div class="space-y-4">
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-[#1d1d1f]">
+                Documents, intelligently.
+            </h1>
+            <p class="text-xl md:text-2xl text-[#86868b] max-w-2xl mx-auto font-normal">
+                Analyze and archive your records with neural precision. Simple, secure, and intuitive.
+            </p>
+        </div>
 
-<section class="container mx-auto max-w-6xl">
-    <div class="flex justify-between items-end mb-8">
-        <h2 class="text-3xl font-bold text-gray-900">Recent <span class="text-brand">Vault</span> Items</h2>
-        <a href="/vault" class="text-brand font-bold hover:underline">View All &rarr;</a>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% if (items.length > 0) { %>
-            <% items.forEach(item => { %>
-                <%- include('partials/card', { name: item.name, description: item.description, createdAt: item.createdAt }) %>
-            <% }) %>
-        <% } else { %>
-            <div class="col-span-full py-20 bg-white rounded-3xl border-2 border-dashed border-brand-accent flex flex-col items-center text-center">
-                <div class="w-16 h-16 bg-brand-accent rounded-full flex items-center justify-center mb-4">
-                    <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800">No items found</h3>
-                <p class="text-gray-500 mb-6 max-w-xs">Start by adding your first digital asset to the vault today.</p>
-                <button class="px-6 py-2 bg-brand text-white rounded-lg font-bold hover:bg-brand-dark transition-colors">
-                    Add My First Item
-                </button>
+        <div class="flex items-center justify-center gap-6 pt-4">
+            <a href="/vault" class="bg-[#1d1d1f] text-white px-8 py-3.5 rounded-full text-base font-medium hover:opacity-90 transition-opacity">
+                Get Started
+            </a>
+            <a href="/signup" class="text-apple-blue hover:underline text-base font-medium">Learn more ></a>
+        </div>
+    </section>
+
+    <!-- Services Grid (Minimalist) -->
+    <div class="grid md:grid-cols-3 gap-16">
+        <div class="space-y-4">
+            <div class="text-[#a855f7]">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
             </div>
-        <% } %>
+            <h3 class="text-lg font-semibold text-[#1d1d1f]">Neural Extraction</h3>
+            <p class="text-[15px] text-[#86868b] leading-relaxed">Gemini 2.0 Flash automatically categorizes and extracts structural intel from your PDF assets.</p>
+        </div>
+        <div class="space-y-4">
+            <div class="text-apple-blue">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-[#1d1d1f]">Binary Security</h3>
+            <p class="text-[15px] text-[#86868b] leading-relaxed">Your files are isolated in private MinIO buckets with end-to-end synchronization protocols.</p>
+        </div>
+        <div class="space-y-4">
+            <div class="text-emerald-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-[#1d1d1f]">Live Sync</h3>
+            <p class="text-[15px] text-[#86868b] leading-relaxed">Real-time socket updates ensure you see the analysis as it happens. No refreshing required.</p>
+        </div>
     </div>
-</section>
+</div>
